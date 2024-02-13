@@ -1,13 +1,23 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:file_picker/file_picker.dart';
 
-import 'package:pragati_a/login_page.dart';
-import 'signup_page.dart';
+import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+
+import 'upload_page.dart';
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'AI Chat Assistant',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ChatScreen(),
+    );
+  }
+}
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -16,37 +26,35 @@ class ChatScreen extends StatefulWidget {
 
 class ChatScreenState extends State<ChatScreen> {
   File? _file;
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
   final TextEditingController _messageController = TextEditingController();
   final List<ChatMessage> _messages = [];
   bool isBotTyping = false;
   FocusNode _textFieldFocus = FocusNode();
   bool _showMicIcon = true;
-
-  void _handleLogin() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
-  }
-
-  void _handleSignup() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SignupPage()),
-    );
-  }
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  String text = '';
+  double _confidence = 1.0;
 
   @override
   void initState() {
     super.initState();
     _textFieldFocus.addListener(_onTextFieldFocusChange);
+    _speech = stt.SpeechToText();
   }
 
   void _onTextFieldFocusChange() {
     setState(() {
       _showMicIcon = !_textFieldFocus.hasFocus;
     });
+  }
+
+  void _logout(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Myupload()),
+    );
   }
 
   @override
@@ -58,80 +66,62 @@ class ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: _navigatorKey,
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 159, 21, 184),
-          title: Center(
-            child: Text(
-              'AI Chat Assistant',
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 159, 21, 184),
+        title: Center(
+          child: Text(
+            'AI Chat Assistant',
           ),
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-              );
-            },
-          ),
-          // leading: Builder(
-          //   builder: (context) => IconButton(
-          //     icon: Icon(Icons.menu),
-          //     onPressed: () => Scaffold.of(context).openDrawer(),
-          //   ),
-          // ),
-          actions: [
-            IconButton(
-              icon: Icon(
-                Icons.login,
-              ),
-              onPressed: () {
-                // Navigate to the sign-up page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChatScreen()),
-                );
-              },
-            ),
-            // IconButton(
-            //   icon: Icon(
-            //     Icons.person_add,
-            //   ),
-            //   onPressed: _handleSignup,
-            // ),
-          ],
         ),
-        // floatingActionButton: Icon(Icons.star),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                  "assests/images/Purple Element.jpeg"), // Replace with your asset image
-              fit: BoxFit.cover,
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Add your login logic here
+              // _handleLogin();
+              _logout(context);
+            },
+            icon: Icon(
+              Icons.logout,
             ),
           ),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  reverse: true, // Display messages in reverse order
-                  itemCount: _messages.length,
-                  itemBuilder: (context, index) {
-                    return _messages[index];
-                  },
-                ),
-              ),
-              _buildMessagePrompt(),
-              _buildMessageComposer(),
-            ],
+        ],
+      ),
+      // floatingActionButton: Icon(Icons.star),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                "assets/images/bot_background.jpeg"), // Replace with your asset image
+            fit: BoxFit.cover,
           ),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                reverse: true, // Display messages in reverse order
+                itemCount: _messages.length,
+                itemBuilder: (context, index) {
+                  return _messages[index];
+                },
+              ),
+            ),
+            _buildMessagePrompt(),
+            _buildMessageComposer(),
+          ],
         ),
       ),
     );
@@ -168,11 +158,6 @@ class ChatScreenState extends State<ChatScreen> {
       ),
       child: Row(
         children: [
-          // IconButton(
-          //   icon: Icon(Icons.upload_file),
-          //   color: Colors.purple,
-          //   onPressed: _pickFile,
-          // ),
           Expanded(
             child: TextField(
               controller: _messageController,
@@ -192,6 +177,7 @@ class ChatScreenState extends State<ChatScreen> {
               ),
               onPressed: () {
                 // Handle microphone button press
+                _listen();
               },
             ),
           IconButton(
@@ -206,6 +192,31 @@ class ChatScreenState extends State<ChatScreen> {
         ],
       ),
     );
+  }
+
+  void _listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
+      );
+      if (available) {
+        setState(() => _isListening = true);
+        _speech.listen(
+          onResult: (val) => setState(() {
+            text = val.recognizedWords;
+            // _messageController = val.recognizedWords;
+            if (val.hasConfidenceRating && val.confidence > 0) {
+              _confidence = val.confidence;
+            }
+            _messageController.text = text;
+          }),
+        );
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
   }
 
   void _handleSubmitted(String text) async {
@@ -305,19 +316,6 @@ class ChatMessage extends StatelessWidget {
                               ),
                             );
                           },
-                          // onPressed: () {
-                          //   // Use showDialog to open a dialog
-                          //   showDialog(
-                          //     context: context,
-                          //     builder: (context) {
-                          //       // Return a widget that will be displayed as the dialog
-                          //       return SimpleDialog(
-                          //         title: Text('Context'),
-                          //         //content: Text('This is the context of the current screen'),
-                          //       );
-                          //     },
-                          //   );
-                          // },
                         )),
                 ],
               ),
