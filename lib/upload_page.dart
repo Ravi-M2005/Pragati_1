@@ -1,7 +1,14 @@
+// ignore_for_file: prefer_const_constructors, unused_element, use_key_in_widget_constructors, library_private_types_in_public_api, prefer_final_fields
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'Chatbot.dart';
+
+Color _gold = Color(0xFFD4A064);
+Color _white = Color(0xFFF2F5F8);
+Color _blue = Color(0xFF1C2541);
+Color _red = Color(0xFFCC4E5C);
 
 class Myupload extends StatelessWidget {
   @override
@@ -52,9 +59,11 @@ class _UploadPageState extends State<UploadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: _blue,
         title: Text('Upload Page'),
       ),
       body: Container(
+        decoration: BoxDecoration(color: _blue),
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,36 +86,41 @@ class _UploadPageState extends State<UploadPage> {
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.upload,
-                      size: 50,
-                      color: Colors.purple,
-                    ),
-                    Center(
-                      child: Text(
-                        'Upload Your Files Here',
-                        style: TextStyle(color: Colors.purple, fontSize: 20.0),
+                child: Container(
+                  color: _white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.upload, size: 50, color: _gold),
+                      Center(
+                        child: Text(
+                          'Upload Your Files Here',
+                          style: TextStyle(color: _gold, fontSize: 20.0),
+                        ),
                       ),
-                    ),
-                    if (_fileName.isNotEmpty)
-                      Text(
-                        'Uploaded File: $_fileName',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                  ],
+                      if (_fileName.isNotEmpty)
+                        Text(
+                          'Uploaded File: $_fileName',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 10),
             Center(
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(_white),
+                ),
                 onPressed: () {
                   _handleUpload(context);
                 },
-                child: Text('Let\'s Go for Chat!'),
+                child: Text(
+                  'Ready to discuss',
+                  style: TextStyle(color: _gold),
+                ),
               ),
             ),
             SizedBox(height: 20),
@@ -142,69 +156,3 @@ class ChatScreen extends StatelessWidget {
     );
   }
 }
-
-//----------------------------------------------------------------------------------------------------------
-
-// import 'dart:io';
-//
-// import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
-//
-// import 'chatbot_ui.dart';
-//
-// class UploadDocumentPage extends StatefulWidget {
-//   @override
-//   _UploadDocumentPageState createState() => _UploadDocumentPageState();
-// }
-//
-// class _UploadDocumentPageState extends State<UploadDocumentPage> {
-//   File? _document;
-//
-//   Future<void> _uploadDocument() async {
-//     final picker = ImagePicker();
-//     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-//
-//     setState(() {
-//       if (pickedFile != null) {
-//         _document = File(pickedFile.path);
-//       } else {
-//         print('No image selected.');
-//       }
-//     });
-//   }
-//
-//   void _navigateToChatbot() {
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(builder: (context) => ChatbotUI()),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Upload Document'),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             _document == null
-//                 ? Text('No document selected.')
-//                 : Image.file(_document!),
-//             ElevatedButton(
-//               onPressed: _uploadDocument,
-//               child: Text('Upload Document'),
-//             ),
-//             ElevatedButton(
-//               // onPressed: _navigateToChatbot,
-//               onPressed: MyApp(),
-//               child: Text('Continue to Chatbot'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

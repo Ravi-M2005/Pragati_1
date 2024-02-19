@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, unused_field, file_names, prefer_const_constructors, unused_element, use_key_in_widget_constructors, prefer_final_fields, prefer_const_literals_to_create_immutables, sort_child_properties_last, avoid_print, prefer_const_constructors_in_immutables, deprecated_member_use
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,12 +7,17 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 import 'upload_page.dart';
 
+Color _gold = Color(0xFFD4A064);
+Color _white = Color(0xFFF2F5F8);
+Color _blue = Color(0xFF1C2541);
+Color _red = Color(0xFFCC4E5C);
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'AI Chat Assistant',
+      title: 'Consult with',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -68,16 +75,18 @@ class ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 159, 21, 184),
+        backgroundColor: _white,
         title: Center(
           child: Text(
-            'AI Chat Assistant',
+            'Consult with',
+            style: TextStyle(color: _gold),
           ),
         ),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
               icon: const Icon(Icons.menu),
+              color: _gold,
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
@@ -94,19 +103,42 @@ class ChatScreenState extends State<ChatScreen> {
             },
             icon: Icon(
               Icons.logout,
+              color: _gold,
             ),
           ),
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          // Add some items to your drawer here
+          children: [
+            // Add an AboutListTile at the end of the drawer
+            AboutListTile(
+              icon: Icon(Icons.info),
+              child: Text('About Us'),
+              applicationName: 'My App',
+              applicationVersion: '1.0.0',
+              // applicationIcon: Image.asset('assets/icon.png'),
+              applicationLegalese: '© 2024 My Company',
+              aboutBoxChildren: [
+                Text('This app is developed by Team Adapt.'),
+                Text('It helps you with your Flutter code.'),
+              ],
+            ),
+          ],
+        ),
+      ),
+
       // floatingActionButton: Icon(Icons.star),
       // floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-                "assets/images/bot_background.jpeg"), // Replace with your asset image
-            fit: BoxFit.cover,
-          ),
+          color: _blue,
+          //   image: DecorationImage(
+          //     image: AssetImage(
+          //         "assets/images/bot_background.jpeg"), // Replace with your asset image
+          //     fit: BoxFit.cover,
+          //   ),
         ),
         child: Column(
           children: [
@@ -121,6 +153,9 @@ class ChatScreenState extends State<ChatScreen> {
             ),
             _buildMessagePrompt(),
             _buildMessageComposer(),
+            SizedBox(
+              height: 10.0,
+            )
           ],
         ),
       ),
@@ -154,7 +189,13 @@ class ChatScreenState extends State<ChatScreen> {
     return Container(
       padding: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Color(0xFFF2F5F8),
+        border: Border.all(
+          color: Color(0xFFD4A064),
+          width: 2.0,
+        ), // add a border
+
+        borderRadius: BorderRadius.circular(50.0), // make it curved
       ),
       child: Row(
         children: [
@@ -165,7 +206,8 @@ class ChatScreenState extends State<ChatScreen> {
               textInputAction: TextInputAction.send,
               onSubmitted: _handleSubmitted,
               decoration: InputDecoration.collapsed(
-                hintText: 'Send a FAQ Prompt...',
+                hintText: 'Type Something...',
+                hintStyle: TextStyle(color: Color(0xFFD4A064)),
               ),
             ),
           ),
@@ -173,7 +215,7 @@ class ChatScreenState extends State<ChatScreen> {
             IconButton(
               icon: Icon(
                 Icons.mic,
-                color: Colors.purple,
+                color: Color(0xFFD4A064),
               ),
               onPressed: () {
                 // Handle microphone button press
@@ -183,7 +225,7 @@ class ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(
               Icons.send,
-              color: Colors.purple,
+              color: Color(0xFFD4A064),
             ),
             onPressed: () {
               _handleSubmitted(_messageController.text);
@@ -270,9 +312,13 @@ class ChatMessage extends StatelessWidget {
             isUser
                 ? CircleAvatar(
                     child: Icon(Icons.person),
+                    backgroundColor: _gold,
+                    foregroundColor: _white,
                   )
                 : CircleAvatar(
                     child: Icon(Icons.android),
+                    backgroundColor: _gold,
+                    foregroundColor: _white,
                   ),
             SizedBox(width: 10.0),
             Expanded(
@@ -280,19 +326,25 @@ class ChatMessage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isUser ? 'You' : 'AI Assistant',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    isUser ? 'You' : 'GYAN',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, color: _white),
                   ),
                   SizedBox(height: 5.0),
                   Container(
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                        color: isUser ? Colors.yellow : Colors.blue[200],
+                        border: Border.all(
+                          color: _gold, // Gold color for the border
+                          width: 2.0, // Width of the border
+                        ),
+                        color: isUser ? _white : _white,
                         borderRadius: BorderRadius.circular(
                             10.0)), // Use a ternary operator to check if the message is from the user or the AI assistant
-                    child: Text(text),
+                    child: Text(
+                      text,
+                      style: TextStyle(color: _gold),
+                    ),
                   ),
                   if (!isUser) // Only show the button when the message is from the AI
                     Container(
@@ -301,18 +353,22 @@ class ChatMessage extends StatelessWidget {
                         child: TextButton(
                           child: Text('Click here to view Context'),
                           style: TextButton.styleFrom(
-                            primary: Colors.white,
-                            backgroundColor: Colors.blue,
-                          ),
+                              primary: Colors.white, backgroundColor: _gold),
                           onPressed: () {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: Text('Context'), // Customize the title
+                                title: Center(
+                                    child: Text(
+                                  'Context',
+                                  style: TextStyle(color: _gold),
+                                )), // Customize the title
                                 content: Text(
-                                    'Enter the additional context for your message:' *
-                                        50,
-                                    style: TextStyle(fontSize: 16.0)),
+                                  'Enter the additional context for your message:' *
+                                      50,
+                                  style:
+                                      TextStyle(color: _gold, fontSize: 16.0),
+                                ),
                               ),
                             );
                           },
