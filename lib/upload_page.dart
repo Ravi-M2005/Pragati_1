@@ -1,7 +1,18 @@
+// ignore_for_file: unused_import, override_on_non_overriding_member, no_leading_underscores_for_local_identifiers, unused_local_variable, prefer_const_constructors, unused_element, use_key_in_widget_constructors, library_private_types_in_public_api, prefer_final_fields
+
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
+import 'API.dart';
 import 'Chatbot.dart';
+
+Color _gold = Color(0xFFD4A064);
+Color _white = Color(0xFFF2F5F8);
+Color _blue = Color(0xFF1C2541);
+Color _red = Color(0xFFCC4E5C);
+
+// ChatAPI api = new ChatAPI();
 
 class Myupload extends StatelessWidget {
   @override
@@ -26,14 +37,24 @@ class _UploadPageState extends State<UploadPage> {
   String _fileName = '';
   List<String> _uploadedFileNames = [];
 
+  @override
+  // void initState() {
+  //   // api.getCSRF();
+  // }
+
   Future pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: false);
 
     if (result != null) {
       if (mounted) {
         setState(() {
           _fileName = result.files.single.name;
           _uploadedFileNames.add(_fileName);
+
+          var path = result.files.first.path;
+          final File _file = File(path!);
+          //  api.sendFile(_file, _fileName);
         });
       }
     } else {
@@ -52,9 +73,11 @@ class _UploadPageState extends State<UploadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upload Page'),
+        backgroundColor: _blue,
+        title: Text(''),
       ),
       body: Container(
+        color: _blue,
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,36 +100,45 @@ class _UploadPageState extends State<UploadPage> {
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.upload,
-                      size: 50,
-                      color: Colors.purple,
-                    ),
-                    Center(
-                      child: Text(
-                        'Upload Your Files Here',
-                        style: TextStyle(color: Colors.purple, fontSize: 20.0),
+                child: Container(
+                  color: _white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.upload,
+                        size: 50,
+                        color: _blue,
                       ),
-                    ),
-                    if (_fileName.isNotEmpty)
-                      Text(
-                        'Uploaded File: $_fileName',
-                        style: TextStyle(fontSize: 16),
+                      Center(
+                        child: Text(
+                          'Upload Your Files Here',
+                          style: TextStyle(color: _blue, fontSize: 20.0),
+                        ),
                       ),
-                  ],
+                      if (_fileName.isNotEmpty)
+                        Text(
+                          'Uploaded File: $_fileName',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 10),
             Center(
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(_gold),
+                ),
                 onPressed: () {
                   _handleUpload(context);
                 },
-                child: Text('Let\'s Go for Chat!'),
+                child: Text(
+                  'Ready to discuss',
+                  style: TextStyle(color: _blue),
+                ),
               ),
             ),
             SizedBox(height: 20),
