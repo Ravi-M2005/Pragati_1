@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // ignore_for_file: unused_field, file_names, prefer_const_constructors, unused_element, use_key_in_widget_constructors, prefer_final_fields, prefer_const_literals_to_create_immutables, sort_child_properties_last, avoid_print, prefer_const_constructors_in_immutables, deprecated_member_use
+=======
+// ignore_for_file: non_constant_identifier_names, unused_field, file_names, prefer_const_constructors, unused_element, use_key_in_widget_constructors, prefer_final_fields, prefer_const_literals_to_create_immutables, sort_child_properties_last, avoid_print, prefer_const_constructors_in_immutables, deprecated_member_use
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
 
 import 'dart:io';
 
@@ -17,7 +21,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+<<<<<<< HEAD
       title: 'Consult with ',
+=======
+      title: 'Consult with',
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -75,10 +83,17 @@ class ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         backgroundColor: _blue,
         title: Center(
           child: Text(
             'Consult with ',
+=======
+        backgroundColor: _white,
+        title: Center(
+          child: Text(
+            'Consult with',
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
             style: TextStyle(color: _gold),
           ),
         ),
@@ -128,16 +143,29 @@ class ChatScreenState extends State<ChatScreen> {
           ],
         ),
       ),
+<<<<<<< HEAD
+=======
+
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
       // floatingActionButton: Icon(Icons.star),
       // floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
       body: Container(
         decoration: BoxDecoration(
+<<<<<<< HEAD
           color: _white,
           // image: DecorationImage(
           //   image: AssetImage(
           //       "assets/images/bot_background.jpeg"), // Replace with your asset image
           //   fit: BoxFit.cover,
           // ),
+=======
+          color: _blue,
+          //   image: DecorationImage(
+          //     image: AssetImage(
+          //         "assets/images/bot_background.jpeg"), // Replace with your asset image
+          //     fit: BoxFit.cover,
+          //   ),
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
         ),
         child: Column(
           children: [
@@ -154,7 +182,11 @@ class ChatScreenState extends State<ChatScreen> {
             _buildMessageComposer(),
             SizedBox(
               height: 10.0,
+<<<<<<< HEAD
             ),
+=======
+            )
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
           ],
         ),
       ),
@@ -188,7 +220,11 @@ class ChatScreenState extends State<ChatScreen> {
     return Container(
       padding: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
+<<<<<<< HEAD
         color: _blue,
+=======
+        color: Color(0xFFF2F5F8),
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
         border: Border.all(
           color: Color(0xFFD4A064),
           width: 2.0,
@@ -205,8 +241,13 @@ class ChatScreenState extends State<ChatScreen> {
               textInputAction: TextInputAction.send,
               onSubmitted: _handleSubmitted,
               decoration: InputDecoration.collapsed(
+<<<<<<< HEAD
                 hintText: 'Send a FAQ Prompt...',
                 hintStyle: TextStyle(color: _gold),
+=======
+                hintText: 'Type Something...',
+                hintStyle: TextStyle(color: Color(0xFFD4A064)),
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
               ),
               style: TextStyle(color: _gold),
             ),
@@ -215,7 +256,11 @@ class ChatScreenState extends State<ChatScreen> {
             IconButton(
               icon: Icon(
                 Icons.mic,
+<<<<<<< HEAD
                 color: _gold,
+=======
+                color: Color(0xFFD4A064),
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
               ),
               onPressed: () {
                 // Handle microphone button press
@@ -225,7 +270,11 @@ class ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(
               Icons.send,
+<<<<<<< HEAD
               color: _gold,
+=======
+              color: Color(0xFFD4A064),
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
             ),
             onPressed: () {
               _handleSubmitted(_messageController.text);
@@ -313,12 +362,20 @@ class ChatMessage extends StatelessWidget {
             isUser
                 ? CircleAvatar(
                     child: Icon(Icons.person),
+<<<<<<< HEAD
                     backgroundColor: _blue,
+=======
+                    backgroundColor: _gold,
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
                     foregroundColor: _white,
                   )
                 : CircleAvatar(
                     child: Icon(Icons.android),
+<<<<<<< HEAD
                     backgroundColor: _blue,
+=======
+                    backgroundColor: _gold,
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
                     foregroundColor: _white,
                   ),
             SizedBox(width: 10.0),
@@ -328,10 +385,15 @@ class ChatMessage extends StatelessWidget {
                 children: [
                   Text(
                     isUser ? 'You' : 'GYAN',
+<<<<<<< HEAD
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: _white,
                     ),
+=======
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, color: _white),
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
                   ),
                   SizedBox(height: 5.0),
                   Container(
@@ -341,7 +403,11 @@ class ChatMessage extends StatelessWidget {
                           color: _gold, // Gold color for the border
                           width: 2.0, // Width of the border
                         ),
+<<<<<<< HEAD
                         color: isUser ? _blue : _blue,
+=======
+                        color: isUser ? _white : _white,
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
                         borderRadius: BorderRadius.circular(
                             10.0)), // Use a ternary operator to check if the message is from the user or the AI assistant
                     child: Text(
@@ -359,9 +425,13 @@ class ChatMessage extends StatelessWidget {
                             style: TextStyle(color: _blue),
                           ),
                           style: TextButton.styleFrom(
+<<<<<<< HEAD
                             primary: _white,
                             backgroundColor: _gold,
                           ),
+=======
+                              primary: Colors.white, backgroundColor: _gold),
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
                           onPressed: () {
                             showDialog(
                               context: context,
@@ -369,7 +439,11 @@ class ChatMessage extends StatelessWidget {
                                 title: Center(
                                     child: Text(
                                   'Context',
+<<<<<<< HEAD
                                   style: TextStyle(color: _blue),
+=======
+                                  style: TextStyle(color: _gold),
+>>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
                                 )), // Customize the title
                                 content: Text(
                                   'Enter the additional context for your message:' *
