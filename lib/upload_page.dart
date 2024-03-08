@@ -1,12 +1,10 @@
-<<<<<<< HEAD
 // ignore_for_file: unused_import, override_on_non_overriding_member, no_leading_underscores_for_local_identifiers, unused_local_variable, prefer_const_constructors, unused_element, use_key_in_widget_constructors, library_private_types_in_public_api, prefer_final_fields
 
+import 'dart:convert';
 import 'dart:io';
-=======
-// ignore_for_file: prefer_const_constructors, unused_element, use_key_in_widget_constructors, library_private_types_in_public_api, prefer_final_fields
->>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'API.dart';
 import 'Chatbot.dart';
@@ -16,11 +14,8 @@ Color _white = Color(0xFFF2F5F8);
 Color _blue = Color(0xFF1C2541);
 Color _red = Color(0xFFCC4E5C);
 
-<<<<<<< HEAD
 // ChatAPI api = new ChatAPI();
 
-=======
->>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
 class Myupload extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -59,9 +54,18 @@ class _UploadPageState extends State<UploadPage> {
           _fileName = result.files.single.name;
           _uploadedFileNames.add(_fileName);
 
-          var path = result.files.first.path;
-          final File _file = File(path!);
-          //  api.sendFile(_file, _fileName);
+          if (kIsWeb) {
+            final data = result.files.single.bytes;
+            final base64EncodedData = base64Encode(data!);
+            final File _file =
+                File('data:application/octet-stream;base64,$base64EncodedData');
+
+            // Do something with the file data, like sending it to the server
+          } else {
+            var path = result.files.first.path;
+            final File _file = File(path!);
+            //  api.sendFile(_file, _fileName);
+          }
         });
       }
     } else {
@@ -81,17 +85,10 @@ class _UploadPageState extends State<UploadPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _blue,
-<<<<<<< HEAD
         title: Text(''),
       ),
       body: Container(
         color: _blue,
-=======
-        title: Text('Upload Page'),
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: _blue),
->>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +116,6 @@ class _UploadPageState extends State<UploadPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-<<<<<<< HEAD
                       Icon(
                         Icons.upload,
                         size: 50,
@@ -131,19 +127,10 @@ class _UploadPageState extends State<UploadPage> {
                           style: TextStyle(color: _blue, fontSize: 20.0),
                         ),
                       ),
-=======
-                      Icon(Icons.upload, size: 50, color: _gold),
-                      Center(
-                        child: Text(
-                          'Upload Your Files Here',
-                          style: TextStyle(color: _gold, fontSize: 20.0),
-                        ),
-                      ),
->>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
                       if (_fileName.isNotEmpty)
                         Text(
                           'Uploaded File: $_fileName',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16, color: _blue),
                         ),
                     ],
                   ),
@@ -154,22 +141,14 @@ class _UploadPageState extends State<UploadPage> {
             Center(
               child: ElevatedButton(
                 style: ButtonStyle(
-<<<<<<< HEAD
                   backgroundColor: MaterialStateProperty.all(_gold),
-=======
-                  backgroundColor: MaterialStateProperty.all(_white),
->>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
                 ),
                 onPressed: () {
                   _handleUpload(context);
                 },
                 child: Text(
                   'Ready to discuss',
-<<<<<<< HEAD
                   style: TextStyle(color: _blue),
-=======
-                  style: TextStyle(color: _gold),
->>>>>>> b370de5672991e7ed0444725f079771d6567cb3c
                 ),
               ),
             ),
@@ -206,3 +185,69 @@ class ChatScreen extends StatelessWidget {
     );
   }
 }
+
+//----------------------------------------------------------------------------------------------------------
+
+// import 'dart:io';
+//
+// import 'package:flutter/material.dart';
+// import 'package:image_picker/image_picker.dart';
+//
+// import 'chatbot_ui.dart';
+//
+// class UploadDocumentPage extends StatefulWidget {
+//   @override
+//   _UploadDocumentPageState createState() => _UploadDocumentPageState();
+// }
+//
+// class _UploadDocumentPageState extends State<UploadDocumentPage> {
+//   File? _document;
+//
+//   Future<void> _uploadDocument() async {
+//     final picker = ImagePicker();
+//     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+//
+//     setState(() {
+//       if (pickedFile != null) {
+//         _document = File(pickedFile.path);
+//       } else {
+//         print('No image selected.');
+//       }
+//     });
+//   }
+//
+//   void _navigateToChatbot() {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(builder: (context) => ChatbotUI()),
+//     );
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Upload Document'),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             _document == null
+//                 ? Text('No document selected.')
+//                 : Image.file(_document!),
+//             ElevatedButton(
+//               onPressed: _uploadDocument,
+//               child: Text('Upload Document'),
+//             ),
+//             ElevatedButton(
+//               // onPressed: _navigateToChatbot,
+//               onPressed: MyApp(),
+//               child: Text('Continue to Chatbot'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
